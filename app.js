@@ -1,11 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-let items = [];
+let items = ["coding","eat","sleep"];
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({
     extended: true
 }))
+
+app.use(express.static("public"));
 
 app.get("/",function(req,res){
     let date = new Date();
