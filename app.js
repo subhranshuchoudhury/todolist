@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 let items = ["coding","eat","sleep"];
+let workItems = [];
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({
     extended: true
@@ -19,21 +20,42 @@ app.get("/",function(req,res){
     };
     let dateString = date.toLocaleDateString("en-US",options);
 
-    res.render('list',{kindOfDay: dateString,newListItems: items});
+    res.render('list',{listTitle: dateString,newListItems: items});
     // list --> list.ejs
 
 });
 
 app.post("/",function(req,res){
+    let item = req.body.newItem;
 
-    items.push(req.body.newItem);
-    res.redirect("/");
+    if (req.body.List === "Work") {
+        workItems.push(item);
+        res.redirect("/work");
+    }else{
+        items.push(item);
+        res.redirect("/");
+    }
+
 });
+
+app.get("/work",function(req,res){
+    res.render('list',{listTitle: "Work",newListItems: workItems});
+});
+
+app.post("/work",function(req,res){
+    let item = req.body.newItem;
+    workItems.push(item);
+    res.redirect("/work");
+})
+
+app.get("/about",(req,res)=>{
+    res.render('about');
+})
 
 
 
 
 //*********************
 app.listen(3000, function(){
-    console.log("server started on port 3000");
+    console.log("Server Live Here: http://localhost:3000/");
 });
